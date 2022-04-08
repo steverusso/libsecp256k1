@@ -360,7 +360,7 @@ impl<'de> de::Visitor<'de> for PublicKeyStrVisitor {
     where
         E: de::Error,
     {
-        let value: &[u8] = &base64::decode(value).unwrap();
+        let value: &[u8] = &base64::decode(value).map_err(|e| E::custom(e))?;
         let key_format = match value.len() {
             33 => PublicKeyFormat::Compressed,
             64 => PublicKeyFormat::Raw,
